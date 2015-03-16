@@ -11,7 +11,7 @@ defmodule FleetApiTest do
 
   test "list_units" do
     use_cassette "list_units", custom: true do
-      {:ok, units} = list_units("http://54.85.141.240:7002")
+      {:ok, units} = list_units("http://localhost:7002")
 
       assert 4 == length(units)
 
@@ -80,7 +80,7 @@ defmodule FleetApiTest do
 
   test "get_unit" do
     use_cassette "get_unit", custom: true do
-      {:ok, unit} = get_unit("http://54.85.141.240:7002", "subgun-http.service")
+      {:ok, unit} = get_unit("http://localhost:7002", "subgun-http.service")
       
       assert "subgun-http.service" == unit.name
       assert "launched" == unit.currentState
@@ -91,36 +91,36 @@ defmodule FleetApiTest do
 
   test "delete_unit" do
     use_cassette "delete_unit", custom: true do
-      assert :ok = delete_unit("http://54.85.141.240:7002", "subgun-http.service")
+      assert :ok = delete_unit("http://localhost:7002", "subgun-http.service")
     end
   end
 
   test "list_machines" do
     use_cassette "list_machines", custom: true do
-      {:ok, machines} = list_machines("http://54.85.141.240:7002")
+      {:ok, machines} = list_machines("http://localhost:7002")
 
       assert length(machines) == 3
 
       assert %FleetApi.Machine{
         id: "76ffb3a4588c46f3941c073df77be5e9",
         metadata: nil,
-        primaryIP: "10.11.200.56"} in machines
+        primaryIP: "127.0.0.1"} in machines
 
       assert %FleetApi.Machine{
         id: "820c30c0867844129d63f4409871ba39",
         metadata: nil,
-        primaryIP: "10.11.200.55"} in machines
+        primaryIP: "127.0.0.2"} in machines
 
       assert %FleetApi.Machine{
         id: "f439a6a2dd8f43dbad60994cc1fb68f6",
         metadata: nil,
-        primaryIP: "10.11.200.57"} in machines
+        primaryIP: "127.0.0.3"} in machines
     end
   end
 
   test "list_unit_states" do
     use_cassette "list_unit_states", custom: true do
-      {:ok, states} = list_unit_states("http://54.85.141.240:7002")
+      {:ok, states} = list_unit_states("http://localhost:7002")
 
       assert length(states) == 1
 
@@ -135,7 +135,7 @@ defmodule FleetApiTest do
   end
 
   test "create unit" do
-    use_cassette "create unit", custom: true do
+    use_cassette "set_unit_new", custom: true do
       unit = %FleetApi.Unit{
         name: "test.service",
         desiredState: "launched",
@@ -148,14 +148,14 @@ defmodule FleetApiTest do
         ]
 
       }
-      
-      assert :ok = create_unit("http://54.85.141.240:7002", "test.service", unit)
+
+      assert :ok = set_unit("http://localhost:7002", "test.service", unit)
     end
   end
 
   test "update_unit_desired_state" do
-    use_cassette "update_unit_desired_state", custom: true do
-      assert :ok = update_unit_desired_state("http://54.85.141.240:7002", "test.service", "launched")
+    use_cassette "set_unit_update", custom: true do
+      assert :ok = set_unit("http://localhost:7002", "test.service", "launched")
     end
   end
 end

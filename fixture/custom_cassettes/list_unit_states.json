@@ -1,7 +1,7 @@
 [
   {
     "request": {
-      "url": "http://54.85.141.240:7002/fleet/v1/state"
+      "url": "http://localhost:7002/fleet/v1/state"
     },
     "response": {
       "status_code": 200,

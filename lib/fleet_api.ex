@@ -89,7 +89,7 @@ defmodule FleetApi do
     url <> separator <> name <> "=" <> value
   end
 
-  defp paginated_request(method, url, headers, body, expected_status \\ 200, resp_bodies \\ [], next_page_token \\ "") do
+  defp paginated_request(method, url, headers, body, expected_status \\ [200], resp_bodies \\ [], next_page_token \\ "") do
     request_url = if next_page_token == "" do
       url
     else
@@ -108,19 +108,13 @@ defmodule FleetApi do
     end
   end
 
-  defp request(method, url, headers, body, expected_status \\ 200) do
+  defp request(method, url, headers, body, expected_status \\ [200]) do
     options = case Application.get_env(:fleet_api, :proxy) do
       nil -> []
       proxy_opts -> [hackney: [proxy: proxy_opts]]
     end
 
     case HTTPoison.request(method, url, body, headers, options) do
-      {:ok, %HTTPoison.Response{status_code: ^expected_status} = response} ->
-        if String.length(response.body) != 0 do
-          {:ok, Poison.decode!(response.body)}
-        else
-          {:ok, nil}
-        end
       {:ok, %HTTPoison.Response{status_code: status} = response} when status in [400..599] ->
         if String.length(response.body) != 0 do
           error = response.body
@@ -130,8 +124,16 @@ defmodule FleetApi do
         else
           {:error, response}
         end
-      {:ok, response} ->
-        {:error, "Expected response status #{expected_status} but got #{response.status_code}"}
+      {:ok, %HTTPoison.Response{status_code: status} = response} ->
+        if status in expected_status do
+          if String.length(response.body) != 0 do
+            {:ok, Poison.decode!(response.body)}
+          else
+            {:ok, nil}
+          end
+        else
+          {:error, "Expected response status #{expected_status} but got #{response.status_code}"}
+        end
       error -> error
     end
   end
@@ -169,27 +171,19 @@ defmodule FleetApi do
   """
   @spec delete_unit(String.t, String.t) :: :ok
   def delete_unit(node_url, unit_name) do
-   case request(:delete, node_url <> "/fleet/v1/units/" <> unit_name, [], "", 204) do
+   case request(:delete, node_url <> "/fleet/v1/units/" <> unit_name, [], "", [204]) do
       {:ok, _} -> :ok
     end
   end
 
   @doc """
-  Add a unit to the Fleet cluster.
+  Adds or updates a unit in the Fleet cluster. If the cluster doesn't contain a
+  unit with the given name, then a new unit is added to it. If a unit with the
+  given name exists, it is updated with the new unit definition.
   """
-  @spec create_unit(String.t, String.t, FleetApi.Unit.t) :: :ok
-  def create_unit(node_url, unit_name, unit) do
-    case request(:put, node_url <> "/fleet/v1/units/" <> unit_name, [{"Content-Type", "application/json"}], Poison.encode!(unit), 201) do
-      {:ok, _} -> :ok
-    end
-  end
-
-  @doc """
-  Change a unit's desiredState value.
-  """
-  @spec update_unit_desired_state(String.t, String.t, String.t) :: :ok
-  def update_unit_desired_state(node_url, unit_name, desired_state) do
-    case request(:put, node_url <> "/fleet/v1/units/" <> unit_name, [{"Content-Type", "application/json"}], "{\"desiredState\":\"#{desired_state}\"", 204) do
+  @spec set_unit(String.t, String.t, FleetApi.Unit.t) :: :ok
+  def set_unit(node_url, unit_name, unit) do
+    case request(:put, node_url <> "/fleet/v1/units/" <> unit_name, [{"Content-Type", "application/json"}], Poison.encode!(unit), [201, 204]) do
       {:ok, _} -> :ok
     end
   end
