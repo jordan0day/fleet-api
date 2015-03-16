@@ -117,6 +117,7 @@ defmodule FleetApi do
     end
   end
 
+  @spec list_units(String.t) :: {:ok, [FleetApi.Unit.t]}
   def list_units(node_url) do
     case paginated_request(:get, node_url <> "/fleet/v1/units", [], "") do
       {:ok, resp_bodies} ->
@@ -128,6 +129,7 @@ defmodule FleetApi do
     end
   end
 
+  @spec get_unit(String.t, String.t) :: {:ok, FleetApi.Unit.t}
   def get_unit(node_url, unit_name) do
     case request(:get, node_url <> "/fleet/v1/units/" <> unit_name, [], "") do
       {:ok, resp_body} ->
@@ -137,24 +139,28 @@ defmodule FleetApi do
     end
   end
 
+  @spec delete_unit(String.t, String.t) :: :ok
   def delete_unit(node_url, unit_name) do
    case request(:delete, node_url <> "/fleet/v1/units/" <> unit_name, [], "", 204) do
       {:ok, _} -> :ok
     end
   end
 
+  @spec create_unit(String.t, String.t, FleetApi.Unit.t) :: :ok
   def create_unit(node_url, unit_name, unit) do
     case request(:put, node_url <> "/fleet/v1/units/" <> unit_name, [{"Content-Type", "application/json"}], Poison.encode!(unit), 201) do
       {:ok, _} -> :ok
     end
   end
 
+  @spec update_unit_desired_state(String.t, String.t, String.t) :: :ok
   def update_unit_desired_state(node_url, unit_name, desired_state) do
     case request(:put, node_url <> "/fleet/v1/units/" <> unit_name, [{"Content-Type", "application/json"}], "{\"desiredState\":\"#{desired_state}\"", 204) do
       {:ok, _} -> :ok
     end
   end
 
+  @spec list_unit_states(String.t, [{atom, String.t}]) :: {:ok, [FleetApi.UnitState.t]}
   def list_unit_states(node_url, opts \\ []) do
     url = node_url <> "/fleet/v1/state"
     machine_id = Keyword.get(opts, :machine_id)
@@ -176,6 +182,7 @@ defmodule FleetApi do
     end
   end
 
+  @spec list_machines(String.t) :: {:ok, [FleetApi.Machine.t]}
   def list_machines(node_url) do
     case paginated_request(:get, node_url <> "/fleet/v1/machines", [], "") do
       {:ok, resp_bodies} ->
