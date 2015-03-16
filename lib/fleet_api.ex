@@ -1,5 +1,12 @@
 defmodule FleetApi do
+  @moduledoc """
+  This module contains functions for interacting with a Fleet API endpoint.
+  """
+
   defmodule UnitOption do
+    @moduledoc """
+    A unit option is one segment of the information used to describe a unit. A unit option contains a `section`, a `name`, and a `value`.
+    """
     defstruct section: nil, name: nil, value: nil
 
     def from_map(option_map) do
@@ -12,6 +19,9 @@ defmodule FleetApi do
   end
 
   defmodule Unit do
+    @moduledoc """
+    A unit describes a running service in a fleet cluster.
+    """
     defstruct name: nil, options: [], desiredState: nil, currentState: nil, machineID: nil
 
     def from_map(unit_map) do
@@ -26,6 +36,9 @@ defmodule FleetApi do
   end
 
   defmodule UnitState do
+    @moduledoc """
+    A unit state represents the current state of a given unit.
+    """
     defstruct name: nil, hash: nil, machineID: nil, systemdLoadState: nil, systemdActiveState: nil, systemdSubState: nil
 
     def from_map(state_map) do
@@ -42,6 +55,9 @@ defmodule FleetApi do
   end
 
   defmodule Machine do
+    @moduledoc """
+    A machine represents a fleet cluster node.
+    """
     defstruct id: nil, primaryIP: nil, metadata: nil
 
     def from_map(machine_map) do
@@ -54,6 +70,9 @@ defmodule FleetApi do
   end
 
   defmodule Error do
+    @moduledoc """
+    Wraps error messages received from the Fleet API.
+    """
     defstruct code: nil, message: nil
 
     def from_map(error_map) do
@@ -117,6 +136,9 @@ defmodule FleetApi do
     end
   end
 
+  @doc """
+  Retrieve the list of units that the Fleet cluster currently knows about.
+  """
   @spec list_units(String.t) :: {:ok, [FleetApi.Unit.t]}
   def list_units(node_url) do
     case paginated_request(:get, node_url <> "/fleet/v1/units", [], "") do
@@ -129,6 +151,9 @@ defmodule FleetApi do
     end
   end
 
+  @doc """
+  Retrieve the details for a specific unit in the Fleet cluster.
+  """
   @spec get_unit(String.t, String.t) :: {:ok, FleetApi.Unit.t}
   def get_unit(node_url, unit_name) do
     case request(:get, node_url <> "/fleet/v1/units/" <> unit_name, [], "") do
@@ -139,6 +164,9 @@ defmodule FleetApi do
     end
   end
 
+  @doc """
+  Remove a unit from the Fleet cluster.
+  """
   @spec delete_unit(String.t, String.t) :: :ok
   def delete_unit(node_url, unit_name) do
    case request(:delete, node_url <> "/fleet/v1/units/" <> unit_name, [], "", 204) do
@@ -146,6 +174,9 @@ defmodule FleetApi do
     end
   end
 
+  @doc """
+  Add a unit to the Fleet cluster.
+  """
   @spec create_unit(String.t, String.t, FleetApi.Unit.t) :: :ok
   def create_unit(node_url, unit_name, unit) do
     case request(:put, node_url <> "/fleet/v1/units/" <> unit_name, [{"Content-Type", "application/json"}], Poison.encode!(unit), 201) do
@@ -153,6 +184,9 @@ defmodule FleetApi do
     end
   end
 
+  @doc """
+  Change a unit's desiredState value.
+  """
   @spec update_unit_desired_state(String.t, String.t, String.t) :: :ok
   def update_unit_desired_state(node_url, unit_name, desired_state) do
     case request(:put, node_url <> "/fleet/v1/units/" <> unit_name, [{"Content-Type", "application/json"}], "{\"desiredState\":\"#{desired_state}\"", 204) do
@@ -160,6 +194,9 @@ defmodule FleetApi do
     end
   end
 
+  @doc """
+  Get the detailed state information for all the units in the Fleet cluster.
+  """
   @spec list_unit_states(String.t, [{atom, String.t}]) :: {:ok, [FleetApi.UnitState.t]}
   def list_unit_states(node_url, opts \\ []) do
     url = node_url <> "/fleet/v1/state"
@@ -182,6 +219,9 @@ defmodule FleetApi do
     end
   end
 
+  @doc """
+  Retrieve the list of nodes currently in the Fleet cluster.
+  """
   @spec list_machines(String.t) :: {:ok, [FleetApi.Machine.t]}
   def list_machines(node_url) do
     case paginated_request(:get, node_url <> "/fleet/v1/machines", [], "") do
