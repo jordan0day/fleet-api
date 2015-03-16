@@ -79,17 +79,29 @@ defmodule FleetApi do
 
     case request(method, request_url, headers, body, expected_status) do
       {:ok, %{"nextPageToken" => token} = resp_body} ->
-        paginated_request(method, url, headers, body, expected_status, [resp_body] ++ resp_bodies, token)
+        paginated_request(method, url, headers, body, expected_status, [resp_body | resp_bodies], token)
       {:ok, resp_body} ->
-        {:ok, [resp_body] ++ resp_bodies}
+        result = [resp_body | resp_bodies]
+                 |> Enum.reverse
+        
+        {:ok, result}
       error -> error
     end
   end
 
   defp request(method, url, headers, body, expected_status \\ 200) do
-    case HTTPoison.request(method, url, body, headers) do
-      {:ok, %HTTPoison.Response{status_code: expected_status} = response} ->
-        {:ok, Poison.decode!(response.body)}
+    options = case Application.get_env(:fleet_api, :proxy) do
+      nil -> []
+      proxy_opts -> [hackney: [proxy: proxy_opts]]
+    end
+
+    case HTTPoison.request(method, url, body, headers, options) do
+      {:ok, %HTTPoison.Response{status_code: ^expected_status} = response} ->
+        if String.length(response.body) != 0 do
+          {:ok, Poison.decode!(response.body)}
+        else
+          {:ok, nil}
+        end
       {:ok, response} ->
         {:error, "Expected response status #{expected_status} but got #{response.status_code}"}
       error -> error
@@ -101,20 +113,25 @@ defmodule FleetApi do
       {:ok, resp_bodies} ->
         units = resp_bodies
                 |> Enum.flat_map(fn resp -> resp["units"] end)
+                |> Enum.filter(fn unit -> unit != nil end)
                 |> Enum.map(&Unit.from_map/1)
-
         {:ok, units}
     end
   end
 
   def get_unit(node_url, unit_name) do
-    case HTTPoison.get(node_url <> "/fleet/v1/units/" <> unit_name) do
-      {:ok, %{status_code: 200, body: body}} ->
-        unit = body
-               |> Poison.decode!
+    case request(:get, node_url <> "/fleet/v1/units/" <> unit_name, [], "") do
+      {:ok, resp_body} ->
+        unit = resp_body
                |> Unit.from_map
-
         {:ok, unit}
+    end
+  end
+
+  def delete_unit(node_url, unit_name) do
+   case request(:delete, node_url <> "/fleet/v1/units/" <> unit_name, [], "", 204) do
+      {:ok, _} ->
+        :ok
     end
   end
 

@@ -27,6 +27,7 @@ defmodule FleetApi.Mixfile do
   defp deps do
     [
       {:httpoison, "0.6.2"},
-      {:poison, "1.3.1"}]
+      {:poison, "1.3.1"},
+      {:exvcr, "0.4.0"}]
   end
 end
