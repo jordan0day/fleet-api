@@ -1,0 +1,16 @@
+[
+  {
+    "request": {
+      "url": "http://54.85.141.240:7002/fleet/v1/units/test.service",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": "{\"desiredState\":\"launched\"}"
+    },
+    "response": {
+      "status_code": 204,
+      "headers": {},
+      "body": ""
+    }
+  }
+]

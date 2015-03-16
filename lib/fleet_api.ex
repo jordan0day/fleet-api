@@ -102,6 +102,15 @@ defmodule FleetApi do
         else
           {:ok, nil}
         end
+      {:ok, %HTTPoison.Response{status_code: status} = response} when status in [400..599] ->
+        if String.length(response.body) != 0 do
+          error = response.body
+                  |> Poison.decode!
+                  |> Error.from_map
+          {:error, error}
+        else
+          {:error, response}
+        end
       {:ok, response} ->
         {:error, "Expected response status #{expected_status} but got #{response.status_code}"}
       error -> error
@@ -130,8 +139,19 @@ defmodule FleetApi do
 
   def delete_unit(node_url, unit_name) do
    case request(:delete, node_url <> "/fleet/v1/units/" <> unit_name, [], "", 204) do
-      {:ok, _} ->
-        :ok
+      {:ok, _} -> :ok
+    end
+  end
+
+  def create_unit(node_url, unit_name, unit) do
+    case request(:put, node_url <> "/fleet/v1/units/" <> unit_name, [{"Content-Type", "application/json"}], Poison.encode!(unit), 201) do
+      {:ok, _} -> :ok
+    end
+  end
+
+  def update_unit_desired_state(node_url, unit_name, desired_state) do
+    case request(:put, node_url <> "/fleet/v1/units/" <> unit_name, [{"Content-Type", "application/json"}], "{\"desiredState\":\"#{desired_state}\"", 204) do
+      {:ok, _} -> :ok
     end
   end
 

@@ -1,0 +1,14 @@
+[
+  {
+    "request": {
+      "url": "http://54.85.141.240:7002/fleet/v1/state"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": "{\"states\":[{\"hash\":\"eef29cad431ad16c8e164400b2f3c85afd73b238\",\"machineID\":\"820c30c0867844129d63f4409871ba39\",\"name\":\"subgun-http.service\",\"systemdActiveState\":\"active\",\"systemdLoadState\":\"loaded\",\"systemdSubState\":\"running\"}]}"
+    }
+  }
+]

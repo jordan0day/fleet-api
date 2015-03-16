@@ -1,0 +1,14 @@
+[
+  {
+    "request": {
+      "url": "http://54.85.141.240:7002/fleet/v1/machines"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": "{\"machines\":[{\"id\":\"76ffb3a4588c46f3941c073df77be5e9\",\"primaryIP\":\"10.11.200.56\"},{\"id\":\"820c30c0867844129d63f4409871ba39\",\"primaryIP\":\"10.11.200.55\"},{\"id\":\"f439a6a2dd8f43dbad60994cc1fb68f6\",\"primaryIP\":\"10.11.200.57\"}]}"
+    }
+  }
+]
