@@ -5,7 +5,9 @@ defmodule FleetApi.Mixfile do
     [app: :fleet_api,
      version: "0.0.1",
      elixir: "~> 1.0",
-     deps: deps]
+     deps: deps,
+     description: description,
+     package: package]
   end
 
   # Configuration for the OTP application
@@ -29,6 +31,16 @@ defmodule FleetApi.Mixfile do
     [
       {:httpoison, "0.6.2"},
       {:poison, "1.3.1"},
-      {:exvcr, "0.4.0"}]
+      {:exvcr, "0.4.0", only: :test}]
+  end
+
+  defp description do
+    "A simple wrapper for the Fleet API. Can be used with etcd tokens or via direct node URLs."
+  end
+
+  defp package do
+    [contributors: ["Jordan Day"],
+     license: ["MIT"],
+     links: %{"GitHub" => "https://github.com/jordan0day/fleet-api.git"}]
   end
 end
