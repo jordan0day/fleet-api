@@ -2,6 +2,8 @@
 
 An elixir wrapper for the [Fleet API](https://github.com/coreos/fleet/blob/master/Documentation/api-v1.md). Connect to the API running on one of your fleet cluster nodes using either a direct node URL or an [etcd](https://etcd.io) etcd token.
 
+[![Build Status](https://semaphoreci.com/api/v1/projects/d90076a2-33bc-458a-88e1-1a36cf82040a/375538/badge.png)](https://semaphoreci.com/jordanday/fleet-api)
+
 ## Usage
 ### etcd token
 
