@@ -40,7 +40,7 @@ defmodule FleetApi.Mixfile do
 
   defp package do
     [contributors: ["Jordan Day"],
-     license: ["MIT"],
+     licenses: ["MIT"],
      links: %{"GitHub" => "https://github.com/jordan0day/fleet-api.git"}]
   end
 end
