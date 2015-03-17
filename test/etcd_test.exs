@@ -1,8 +1,8 @@
-defmodule FleetApi.Direct.Test do
+defmodule FleetApi.Etcd.Test do
   use ExUnit.Case
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
-  import FleetApi.Direct
+  import FleetApi.Etcd
 
   setup_all do
     ExVCR.Config.cassette_library_dir("fixture/vcr_cassettes", "fixture/custom_cassettes")
@@ -10,8 +10,8 @@ defmodule FleetApi.Direct.Test do
   end
 
   test "list_units" do
-    use_cassette "list_units", custom: true do
-      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+    use_cassette "etcd_list_units", custom: true do
+      {:ok, pid} = FleetApi.Etcd.start_link("abcd1234")
       {:ok, units} = list_units(pid)
 
       assert 4 == length(units)
@@ -81,8 +81,8 @@ defmodule FleetApi.Direct.Test do
   end
 
   test "get_unit" do
-    use_cassette "get_unit", custom: true do
-      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+    use_cassette "etcd_get_unit", custom: true do
+      {:ok, pid} = FleetApi.Etcd.start_link("abcd1234")
       {:ok, unit} = get_unit(pid, "subgun-http.service")
       
       assert "subgun-http.service" == unit.name
@@ -93,15 +93,15 @@ defmodule FleetApi.Direct.Test do
   end
 
   test "delete_unit" do
-    use_cassette "delete_unit", custom: true do
-      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+    use_cassette "etcd_delete_unit", custom: true do
+      {:ok, pid} = FleetApi.Etcd.start_link("abcd1234")
       assert :ok = delete_unit(pid, "subgun-http.service")
     end
   end
 
   test "list_machines" do
-    use_cassette "list_machines", custom: true do
-      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+    use_cassette "etcd_list_machines", custom: true do
+      {:ok, pid} = FleetApi.Etcd.start_link("abcd1234")
       {:ok, machines} = list_machines(pid)
 
       assert length(machines) == 3
@@ -124,8 +124,8 @@ defmodule FleetApi.Direct.Test do
   end
 
   test "list_unit_states" do
-    use_cassette "list_unit_states", custom: true do
-      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+    use_cassette "etcd_list_unit_states", custom: true do
+      {:ok, pid} = FleetApi.Etcd.start_link("abcd1234")
       {:ok, states} = list_unit_states(pid)
 
       assert length(states) == 1
@@ -141,7 +141,7 @@ defmodule FleetApi.Direct.Test do
   end
 
   test "create unit" do
-    use_cassette "set_unit_new", custom: true do
+    use_cassette "etcd_set_unit_new", custom: true do
       unit = %FleetApi.Unit{
         name: "test.service",
         desiredState: "launched",
@@ -155,14 +155,14 @@ defmodule FleetApi.Direct.Test do
 
       }
 
-      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+      {:ok, pid} = FleetApi.Etcd.start_link("abcd1234")
       assert :ok = set_unit(pid, "test.service", unit)
     end
   end
 
   test "update_unit_desired_state" do
-    use_cassette "set_unit_update", custom: true do
-      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+    use_cassette "etcd_set_unit_update", custom: true do
+      {:ok, pid} = FleetApi.Etcd.start_link("abcd1234")
       assert :ok = set_unit(pid, "test.service", "launched")
     end
   end

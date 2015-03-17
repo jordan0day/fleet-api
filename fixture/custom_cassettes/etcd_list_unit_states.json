@@ -1,0 +1,38 @@
+[
+  {
+    "request": {
+      "url": "https://discovery.etcd.io/abcd1234"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": "{\"action\":\"get\",\"node\":{\"key\":\"/_etcd/registry/abcd1234\",\"dir\":true,\"nodes\":[{\"value\":\"http://127.0.0.1:7001\"},{\"value\":\"http://127.0.0.2:7001\"},{\"value\":\"http://127.0.0.3:7001\"}],\"modifiedIndex\":381975809,\"createdIndex\":381975809}}"
+    }
+  },
+  {
+    "request": {
+      "url": "http://127.0.0.1:7002/fleet/v1/discovery"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": ""
+    }
+  },
+  {
+    "request": {
+      "url": "http://127.0.0.1:7002/fleet/v1/state"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": "{\"states\":[{\"hash\":\"eef29cad431ad16c8e164400b2f3c85afd73b238\",\"machineID\":\"820c30c0867844129d63f4409871ba39\",\"name\":\"subgun-http.service\",\"systemdActiveState\":\"active\",\"systemdLoadState\":\"loaded\",\"systemdSubState\":\"running\"}]}"
+    }
+  }
+]

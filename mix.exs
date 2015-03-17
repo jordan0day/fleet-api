@@ -12,7 +12,8 @@ defmodule FleetApi.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger, :httpoison]]
+    [ applications: [:logger, :httpoison],
+      env: [etcd: [fix_port_number: true, api_port: 7002]]]
   end
 
   # Dependencies can be Hex packages:
