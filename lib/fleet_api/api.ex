@@ -35,7 +35,7 @@ defmodule FleetApi.Api do
       end
 
       
-      @spec api_list_units(String.t) :: {:ok, [FleetApi.Unit.t]}
+      @spec api_list_units(String.t) :: {:ok, [FleetApi.Unit.t]} | {:error, any}
       defp api_list_units(node_url) do
         case paginated_request(:get, node_url <> "/fleet/v1/units", [], "") do
           {:ok, resp_bodies} ->
@@ -49,7 +49,7 @@ defmodule FleetApi.Api do
       end
 
       
-      @spec api_get_unit(String.t, String.t) :: {:ok, FleetApi.Unit.t}
+      @spec api_get_unit(String.t, String.t) :: {:ok, FleetApi.Unit.t} | {:error, any}
       defp api_get_unit(node_url, unit_name) do
         case request(:get, node_url <> "/fleet/v1/units/" <> unit_name, [], "") do
           {:ok, resp_body} ->
@@ -61,7 +61,7 @@ defmodule FleetApi.Api do
       end
 
       
-      @spec api_delete_unit(String.t, String.t) :: :ok
+      @spec api_delete_unit(String.t, String.t) :: :ok | {:error, any}
       defp api_delete_unit(node_url, unit_name) do
        case request(:delete, node_url <> "/fleet/v1/units/" <> unit_name, [], "", [204]) do
           {:ok, _} -> :ok
@@ -70,7 +70,7 @@ defmodule FleetApi.Api do
       end
 
       
-      @spec api_set_unit(String.t, String.t, FleetApi.Unit.t) :: :ok
+      @spec api_set_unit(String.t, String.t, FleetApi.Unit.t) :: :ok | {:error, any}
       defp api_set_unit(node_url, unit_name, unit) do
         case request(:put, node_url <> "/fleet/v1/units/" <> unit_name, [{"Content-Type", "application/json"}], Poison.encode!(unit), [201, 204]) do
           {:ok, _} -> :ok
@@ -79,7 +79,7 @@ defmodule FleetApi.Api do
       end
 
       
-      @spec api_list_unit_states(String.t, [{atom, String.t}]) :: {:ok, [FleetApi.UnitState.t]}
+      @spec api_list_unit_states(String.t, [{atom, String.t}]) :: {:ok, [FleetApi.UnitState.t]} | {:error, any}
       defp api_list_unit_states(node_url, opts \\ []) do
         url = node_url <> "/fleet/v1/state"
         machine_id = Keyword.get(opts, :machine_id)
@@ -103,7 +103,7 @@ defmodule FleetApi.Api do
       end
 
       
-      @spec api_list_machines(String.t) :: {:ok, [FleetApi.Machine.t]}
+      @spec api_list_machines(String.t) :: {:ok, [FleetApi.Machine.t]} | {:error, any}
       defp api_list_machines(node_url) do
         case paginated_request(:get, node_url <> "/fleet/v1/machines", [], "") do
           {:ok, resp_bodies} ->
@@ -116,7 +116,7 @@ defmodule FleetApi.Api do
         end
       end
 
-      @spec api_discovery(String.t) :: {:ok, Map.t} | :error
+      @spec api_discovery(String.t) :: {:ok, Map.t} | {:error, any}
       defp api_discovery(node_url) do
         case request(:get, node_url <> "/fleet/v1/discovery") do
           {:ok, discovery} -> {:ok, discovery}

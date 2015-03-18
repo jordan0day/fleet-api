@@ -7,24 +7,24 @@ defmodule FleetApi do
   @doc """
   Retrieve the list of units that the Fleet cluster currently knows about.
   """
-  defcallback list_units(pid) :: {:ok, [FleetApi.Unit.t]}
+  defcallback list_units(pid) :: {:ok, [FleetApi.Unit.t]} | {:error, any}
 
   @doc """
   Retrieve the details for a specific unit in the Fleet cluster.
   """
-  defcallback get_unit(pid, unit_name :: String.t) :: {:ok, FleetApi.Unit.t}
+  defcallback get_unit(pid, unit_name :: String.t) :: {:ok, FleetApi.Unit.t} | {:error, any}
 
   @doc """
   Remove a unit from the Fleet cluster.
   """
-  defcallback delete_unit(pid, unit_name :: String.t) :: :ok
+  defcallback delete_unit(pid, unit_name :: String.t) :: :ok | {:error, any}
 
   @doc """
   Adds or updates a unit in the Fleet cluster. If the cluster doesn't contain a
   unit with the given name, then a new unit is added to it. If a unit with the
   given name exists, it is updated with the new unit definition.
   """
-  defcallback set_unit(pid, unit_name :: String.t, FleetApi.Unit.t) :: :ok
+  defcallback set_unit(pid, unit_name :: String.t, FleetApi.Unit.t) :: :ok | {:error, any}
 
   @doc """
   Get the detailed state information for all the units in the Fleet cluster.
@@ -32,12 +32,12 @@ defmodule FleetApi do
   You may optionally provide options `machineID` and/or `unitName` to filter
   the response to a particular host or unit.
   """
-  defcallback list_unit_states(pid, opts :: [{atom, String.t}]) :: {:ok, [FleetApi.UnitState.t]}
+  defcallback list_unit_states(pid, opts :: [{atom, String.t}]) :: {:ok, [FleetApi.UnitState.t]} | {:error, any}
 
   @doc """
   Retrieve the list of nodes currently in the Fleet cluster.
   """
-  defcallback list_machines(pid) :: {:ok, [FleetApi.Machine.t]}
+  defcallback list_machines(pid) :: {:ok, [FleetApi.Machine.t]} | {:error, any}
 
   defmacro __using__(_) do
     quote do
