@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>README</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+    <script type="text/javascript" charset="utf-8">
+      relpath = '';
+      if (relpath != '') relpath += '/';
+    </script>
+
+    <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+  </head>
+
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+
+    <section id="content">
+      <div class="breadcrumbs">fleet_api v0.0.2 &rarr; <a href="readme.html">README</a></div>
+      <h1>FleetApi</h1>
+<p>An elixir wrapper for the <a href="https://github.com/coreos/fleet/blob/master/Documentation/api-v1.md">Fleet API</a>. Connect to the API running on one of your fleet cluster nodes using either a direct node URL or an <a href="https://etcd.io">etcd</a> etcd token.</p>
+<p><a href="https://semaphoreci.com/jordanday/fleet-api"><img src="https://semaphoreci.com/api/v1/projects/d90076a2-33bc-458a-88e1-1a36cf82040a/375538/badge.png" alt="Build Status"/></a></p>
+<h2>Usage</h2>
+<h3>etcd token</h3>
+<p><em>Note that this is a config value you can set to override the port used to connect to the Fleet API when using an etcd token.</em>
+In your app’s config, you can set</p>
+<pre><code class="elixir">config :fleet_api, :etcd
+  fix_port_number: true,
+  api_port: 4001</code></pre>
+<p>To get the api to use the correct port, regardless of what might be stored in etcd.</p>
+<pre><code class="elixir">{:ok, pid} = FleetApi.Etcd.start_link(&quot;your etcd token&quot;)
+{:ok, units} = FleetApi.Etcd.list_units(pid)
+
+[%FleetApi.Unit{currentState: &quot;launched&quot;, desiredState: &quot;launched&quot;,
+  machineID: &quot;820c30c0867844129d63f4409871ba39&quot;, name: &quot;subgun-http.service&quot;,
+  options: [%FleetApi.UnitOption{name: &quot;Description&quot;, section: &quot;Unit&quot;,
+    value: &quot;subgun&quot;},
+   %FleetApi.UnitOption{name: &quot;ExecStartPre&quot;, section: &quot;Service&quot;,
+    value: &quot;-/usr/bin/docker kill subgun-%i&quot;},
+   %FleetApi.UnitOption{name: &quot;ExecStartPre&quot;, section: &quot;Service&quot;,
+    value: &quot;-/usr/bin/docker rm subgun-%i&quot;}...]</code></pre>
+<h3>Direct node URL</h3>
+<pre><code class="elixir">{:ok, pid} = FleetApi.Direct.start_link(&quot;http://your-node-host-or-ip:7002&quot;)
+{:ok, units} = FleetApi.Direct.list_units(pid)
+
+[%FleetApi.Unit{currentState: &quot;launched&quot;, desiredState: &quot;launched&quot;,
+  machineID: &quot;820c30c0867844129d63f4409871ba39&quot;, name: &quot;subgun-http.service&quot;,
+  options: [%FleetApi.UnitOption{name: &quot;Description&quot;, section: &quot;Unit&quot;,
+    value: &quot;subgun&quot;},
+   %FleetApi.UnitOption{name: &quot;ExecStartPre&quot;, section: &quot;Service&quot;,
+    value: &quot;-/usr/bin/docker kill subgun-%i&quot;},
+   %FleetApi.UnitOption{name: &quot;ExecStartPre&quot;, section: &quot;Service&quot;,
+    value: &quot;-/usr/bin/docker rm subgun-%i&quot;}...]</code></pre>
+
+    </section>
+  </body>
+</html>

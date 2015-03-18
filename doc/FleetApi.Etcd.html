@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FleetApi.Etcd</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="css/elixir.css" type="text/css" media="screen" charset="utf-8" />
+    <script type="text/javascript" charset="utf-8">
+      relpath = '';
+      if (relpath != '') relpath += '/';
+    </script>
+
+    <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/highlight.pack.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      hljs.initHighlightingOnLoad();
+      hljs.configure({languages: []}); //disable autodetect
+    </script>
+  </head>
+
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+
+    <section id="content">
+      <div class="breadcrumbs">fleet_api v0.0.2 &rarr; <a href="overview.html">Overview</a> &rarr; <a href="FleetApi.html">FleetApi</a> &rarr; <a href="FleetApi.Etcd.html">Etcd</a></div>
+      <h1>
+        FleetApi.Etcd
+        
+      </h1>
+
+      <ul class="summary_links">
+        
+          <li><a href="#summary">Summary</a></li>
+        
+        
+        
+          <li><a href="#functions_details">Functions</a></li>
+        
+        
+        
+      </ul>
+
+      
+        <section id="moduledoc" class="docstring">
+          <p>Accesses the Fleet API via a URL discovered through etcd.  </p>
+
+        </section>
+      
+
+      
+        <a href="https://github.com/jordan0day/fleet-api/blob/master/lib/fleet_api/etcd.ex#L1" class="view_source">Source</a>
+      
+
+      
+        <h2 id="summary">Summary<span class="detail_header_links"><a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a></span></h2>
+        <table class="summary">
+          <tr>
+  <td class="summary_signature"><a href="#delete_unit/2">delete_unit(pid, unit_name)</a></td>
+  
+    <td class="summary_synopsis"><p>Callback implementation for <a href="FleetApi.html#c:delete_unit/2"><code class="inline">FleetApi.delete_unit/2</code></a></p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#get_node_url/1">get_node_url(pid)</a></td>
+  
+    <td class="summary_synopsis"><p>Retrieves a Fleet node URL based on the information stored in etcd, using the
+etcd token specified when the GenServer was started</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#get_unit/2">get_unit(pid, unit_name)</a></td>
+  
+    <td class="summary_synopsis"><p>Callback implementation for <a href="FleetApi.html#c:get_unit/2"><code class="inline">FleetApi.get_unit/2</code></a></p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#list_machines/1">list_machines(pid)</a></td>
+  
+    <td class="summary_synopsis"><p>Callback implementation for <a href="FleetApi.html#c:list_machines/1"><code class="inline">FleetApi.list_machines/1</code></a></p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#list_unit_states/2">list_unit_states(pid, opts \\ [])</a></td>
+  
+    <td class="summary_synopsis"><p>Callback implementation for <a href="FleetApi.html#c:list_unit_states/2"><code class="inline">FleetApi.list_unit_states/2</code></a></p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#list_units/1">list_units(pid)</a></td>
+  
+    <td class="summary_synopsis"></td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#set_unit/3">set_unit(pid, unit_name, unit)</a></td>
+  
+    <td class="summary_synopsis"><p>Callback implementation for <a href="FleetApi.html#c:set_unit/3"><code class="inline">FleetApi.set_unit/3</code></a></p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#start_link/1">start_link(etcd_token)</a></td>
+  
+</tr>
+
+        </table>
+      
+
+      
+
+      
+        <section id="functions_details" class="details_list">
+          <h2>Functions</h2>
+          <section class="detail">
+  <div class="detail_header" id="delete_unit/2">
+    <span class="signature"><strong>delete_unit(pid, unit_name)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#delete_unit/2" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>Callback implementation for <a href="FleetApi.html#c:delete_unit/2"><code class="inline">FleetApi.delete_unit/2</code></a>.</p>
+
+  </section>
+  
+    <a href="https://github.com/jordan0day/fleet-api/blob/master/lib/fleet_api/etcd.ex#L5" class="view_source">Source</a>
+  
+</section>
+<section class="detail">
+  <div class="detail_header" id="get_node_url/1">
+    <span class="signature"><strong>get_node_url(pid)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#get_node_url/1" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+    <p>Specs:</p>
+    <ul class="spec">
+      
+        <li>get_node_url(pid) :: <a href="http://elixir-lang.org/docs/stable/elixir/String.html#t:t/0">String.t</a></li>
+      
+    </ul>
+  
+  <section class="docstring">
+    <p>Retrieves a Fleet node URL based on the information stored in etcd, using the
+etcd token specified when the GenServer was started.</p>
+
+  </section>
+  
+    <a href="https://github.com/jordan0day/fleet-api/blob/master/lib/fleet_api/etcd.ex#L24" class="view_source">Source</a>
+  
+</section>
+<section class="detail">
+  <div class="detail_header" id="get_unit/2">
+    <span class="signature"><strong>get_unit(pid, unit_name)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#get_unit/2" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>Callback implementation for <a href="FleetApi.html#c:get_unit/2"><code class="inline">FleetApi.get_unit/2</code></a>.</p>
+
+  </section>
+  
+    <a href="https://github.com/jordan0day/fleet-api/blob/master/lib/fleet_api/etcd.ex#L5" class="view_source">Source</a>
+  
+</section>
+<section class="detail">
+  <div class="detail_header" id="list_machines/1">
+    <span class="signature"><strong>list_machines(pid)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#list_machines/1" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>Callback implementation for <a href="FleetApi.html#c:list_machines/1"><code class="inline">FleetApi.list_machines/1</code></a>.</p>
+
+  </section>
+  
+    <a href="https://github.com/jordan0day/fleet-api/blob/master/lib/fleet_api/etcd.ex#L5" class="view_source">Source</a>
+  
+</section>
+<section class="detail">
+  <div class="detail_header" id="list_unit_states/2">
+    <span class="signature"><strong>list_unit_states(pid, opts \\ [])</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#list_unit_states/2" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>Callback implementation for <a href="FleetApi.html#c:list_unit_states/2"><code class="inline">FleetApi.list_unit_states/2</code></a>.</p>
+
+  </section>
+  
+    <a href="https://github.com/jordan0day/fleet-api/blob/master/lib/fleet_api/etcd.ex#L5" class="view_source">Source</a>
+  
+</section>
+<section class="detail">
+  <div class="detail_header" id="list_units/1">
+    <span class="signature"><strong>list_units(pid)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#list_units/1" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    
+  </section>
+  
+    <a href="https://github.com/jordan0day/fleet-api/blob/master/lib/fleet_api/etcd.ex#L5" class="view_source">Source</a>
+  
+</section>
+<section class="detail">
+  <div class="detail_header" id="set_unit/3">
+    <span class="signature"><strong>set_unit(pid, unit_name, unit)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#set_unit/3" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>Callback implementation for <a href="FleetApi.html#c:set_unit/3"><code class="inline">FleetApi.set_unit/3</code></a>.</p>
+
+  </section>
+  
+    <a href="https://github.com/jordan0day/fleet-api/blob/master/lib/fleet_api/etcd.ex#L5" class="view_source">Source</a>
+  
+</section>
+<section class="detail">
+  <div class="detail_header" id="start_link/1">
+    <span class="signature"><strong>start_link(etcd_token)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#start_link/1" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    
+  </section>
+  
+    <a href="https://github.com/jordan0day/fleet-api/blob/master/lib/fleet_api/etcd.ex#L11" class="view_source">Source</a>
+  
+</section>
+
+        </section>
+      
+
+      
+
+      
+    </section>
+  </body>
+</html>

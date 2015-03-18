@@ -3,11 +3,14 @@ defmodule FleetApi.Mixfile do
 
   def project do
     [app: :fleet_api,
-     version: "0.0.1",
+     version: "0.0.2",
      elixir: "~> 1.0",
      deps: deps,
      description: description,
-     package: package]
+     package: package,
+     docs: [readme: "README.md",
+            main: "README",
+            source_url: "https://github.com/jordan0day/fleet-api"]]
   end
 
   # Configuration for the OTP application
@@ -31,7 +34,9 @@ defmodule FleetApi.Mixfile do
     [
       {:httpoison, "0.6.2"},
       {:poison, "1.3.1"},
-      {:exvcr, "0.4.0", only: :test}]
+      {:exvcr, "0.4.0", only: :test},
+      {:earmark, "~> 0.1", only: :dev},
+      {:ex_doc, "~> 0.7", only: :dev}]
   end
 
   defp description do

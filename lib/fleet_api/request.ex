@@ -1,13 +1,12 @@
 defmodule FleetApi.Request do
+  @moduledoc false
   defmacro __using__(_) do
     quote do
-      @doc """
-      Issue a request to the specified url, optionally passing a list of header
-      tuples and a body. The method argument specifies the HTTP method in the
-      form of an atom, e.g. :get, :post, :delete, etc.
-      """
+      # Issue a request to the specified url, optionally passing a list of header
+      # tuples and a body. The method argument specifies the HTTP method in the
+      # form of an atom, e.g. :get, :post, :delete, etc.
       @spec request(atom, String.t, [tuple], String.t, [integer]) :: {:ok, any} | {:error, any}
-      def request(method, url, headers \\ [], body \\ "", expected_status \\ [200]) do
+      defp request(method, url, headers \\ [], body \\ "", expected_status \\ [200]) do
         options = case Application.get_env(:fleet_api, :proxy) do
           nil -> []
           proxy_opts -> [hackney: [proxy: proxy_opts]]

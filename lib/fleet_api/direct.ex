@@ -16,7 +16,8 @@ defmodule FleetApi.Direct do
   end 
 
   @doc """
-  Callback implementation of FleetApi.get_node_url/0
+  Retrieves the Fleet node URL based on the URL provided when the GenServer
+  was started.
   """
   @spec get_node_url(pid) :: String.t
   def get_node_url(pid) do

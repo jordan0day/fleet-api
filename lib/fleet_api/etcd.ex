@@ -17,7 +17,8 @@ defmodule FleetApi.Etcd do
   end
 
   @doc """
-  Callback implementation of FleetApi.get_node_url/0
+  Retrieves a Fleet node URL based on the information stored in etcd, using the
+  etcd token specified when the GenServer was started.
   """
   @spec get_node_url(pid) :: String.t
   def get_node_url(pid) do

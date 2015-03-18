@@ -19,7 +19,7 @@ To get the api to use the correct port, regardless of what might be stored in et
 
 ```elixir
 {:ok, pid} = FleetApi.Etcd.start_link("your etcd token")
-{:ok, units} = FleetApi.Etcd.list_units
+{:ok, units} = FleetApi.Etcd.list_units(pid)
 
 [%FleetApi.Unit{currentState: "launched", desiredState: "launched",
   machineID: "820c30c0867844129d63f4409871ba39", name: "subgun-http.service",
@@ -35,7 +35,7 @@ To get the api to use the correct port, regardless of what might be stored in et
 
 ```elixir
 {:ok, pid} = FleetApi.Direct.start_link("http://your-node-host-or-ip:7002")
-{:ok, units} = FleetApi.Direct.list_units
+{:ok, units} = FleetApi.Direct.list_units(pid)
 
 [%FleetApi.Unit{currentState: "launched", desiredState: "launched",
   machineID: "820c30c0867844129d63f4409871ba39", name: "subgun-http.service",

@@ -1,4 +1,5 @@
 defmodule FleetApi.Api do
+  @moduledoc false
   defmacro __using__(_) do
     quote do
       use FleetApi.Request
@@ -110,7 +111,7 @@ defmodule FleetApi.Api do
       end
 
       @spec api_discovery(String.t) :: {:ok, Map.t} | :error
-      def api_discovery(node_url) do
+      defp api_discovery(node_url) do
         case request(:get, node_url <> "/fleet/v1/discovery") do
           {:ok, discovery} -> {:ok, discovery}
           {:error, _} -> :error

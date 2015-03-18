@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FleetApi.Unit</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="css/elixir.css" type="text/css" media="screen" charset="utf-8" />
+    <script type="text/javascript" charset="utf-8">
+      relpath = '';
+      if (relpath != '') relpath += '/';
+    </script>
+
+    <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/highlight.pack.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      hljs.initHighlightingOnLoad();
+      hljs.configure({languages: []}); //disable autodetect
+    </script>
+  </head>
+
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+
+    <section id="content">
+      <div class="breadcrumbs">fleet_api v0.0.2 &rarr; <a href="overview.html">Overview</a> &rarr; <a href="FleetApi.html">FleetApi</a> &rarr; <a href="FleetApi.Unit.html">Unit</a></div>
+      <h1>
+        FleetApi.Unit
+        
+      </h1>
+
+      <ul class="summary_links">
+        
+          <li><a href="#summary">Summary</a></li>
+        
+        
+          <li><a href="#types_details">Types</a></li>
+        
+        
+          <li><a href="#functions_details">Functions</a></li>
+        
+        
+        
+      </ul>
+
+      
+        <section id="moduledoc" class="docstring">
+          <p>Defines a <a href="FleetApi.Unit.html"><code class="inline">FleetApi.Unit</code></a> struct, representing a service in a fleet cluster.</p>
+<p>The following fields are public:</p>
+<ul>
+<li><code class="inline">name</code>         - unique identifier of entity.
+</li>
+<li><code class="inline">options</code>      - list of UnitOption entities.
+</li>
+<li><code class="inline">desiredState</code> - state the user wishes the unit to be in (“inactive”, “loaded”, or “launched”).
+</li>
+<li><code class="inline">currentState</code> - state the unit is currently in (same possible values as desiredState).
+</li>
+<li><code class="inline">machineID</code>    - ID of machine to which the unit is scheduled.
+</li>
+</ul>
+
+        </section>
+      
+
+      
+        <a href="https://github.com/jordan0day/fleet-api/blob/master/lib/fleet_api/unit.ex#L1" class="view_source">Source</a>
+      
+
+      
+        <h2 id="summary">Summary<span class="detail_header_links"><a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a></span></h2>
+        <table class="summary">
+          <tr>
+  <td class="summary_signature"><a href="#from_map/1">from_map(unit_map)</a></td>
+  
+</tr>
+
+        </table>
+      
+
+      
+        <section id="types_details" class="details_list">
+          <h2>Types <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a></h2>
+          <div class="type_detail">
+  <p class="typespec" id="t:t/0">
+    <a href="#t:t/0">t</a> :: %FleetApi.Unit{currentState: term, desiredState: term, machineID: term, name: term, options: term}
+  </p>
+  
+</div>
+
+        </section>
+      
+
+      
+        <section id="functions_details" class="details_list">
+          <h2>Functions</h2>
+          <section class="detail">
+  <div class="detail_header" id="from_map/1">
+    <span class="signature"><strong>from_map(unit_map)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#from_map/1" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+    <p>Specs:</p>
+    <ul class="spec">
+      
+        <li>from_map(%{<a href="http://elixir-lang.org/docs/stable/elixir/String.html#t:t/0">String.t</a> => any}) :: <a href="FleetApi.Unit.html#t:t/0">FleetApi.Unit.t</a></li>
+      
+    </ul>
+  
+  <section class="docstring">
+    
+  </section>
+  
+    <a href="https://github.com/jordan0day/fleet-api/blob/master/lib/fleet_api/unit.ex#L19" class="view_source">Source</a>
+  
+</section>
+
+        </section>
+      
+
+      
+
+      
+    </section>
+  </body>
+</html>
