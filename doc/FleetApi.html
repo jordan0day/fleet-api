@@ -78,7 +78,7 @@
     <p>Specs:</p>
     <ul class="spec">
       
-        <li>delete_unit(pid, unit_name :: <a href="http://elixir-lang.org/docs/stable/elixir/String.html#t:t/0">String.t</a>) :: :ok</li>
+        <li>delete_unit(pid, unit_name :: <a href="http://elixir-lang.org/docs/stable/elixir/String.html#t:t/0">String.t</a>) :: :ok | {:error, any}</li>
       
     </ul>
   
@@ -103,7 +103,7 @@
     <p>Specs:</p>
     <ul class="spec">
       
-        <li>get_unit(pid, unit_name :: <a href="http://elixir-lang.org/docs/stable/elixir/String.html#t:t/0">String.t</a>) :: {:ok, <a href="FleetApi.Unit.html#t:t/0">FleetApi.Unit.t</a>}</li>
+        <li>get_unit(pid, unit_name :: <a href="http://elixir-lang.org/docs/stable/elixir/String.html#t:t/0">String.t</a>) :: {:ok, <a href="FleetApi.Unit.html#t:t/0">FleetApi.Unit.t</a>} | {:error, any}</li>
       
     </ul>
   
@@ -128,7 +128,7 @@
     <p>Specs:</p>
     <ul class="spec">
       
-        <li>list_machines(pid) :: {:ok, [<a href="FleetApi.Machine.html#t:t/0">FleetApi.Machine.t</a>]}</li>
+        <li>list_machines(pid) :: {:ok, [<a href="FleetApi.Machine.html#t:t/0">FleetApi.Machine.t</a>]} | {:error, any}</li>
       
     </ul>
   
@@ -153,7 +153,7 @@
     <p>Specs:</p>
     <ul class="spec">
       
-        <li>list_unit_states(pid, opts :: [{atom, <a href="http://elixir-lang.org/docs/stable/elixir/String.html#t:t/0">String.t</a>}]) :: {:ok, [<a href="FleetApi.UnitState.html#t:t/0">FleetApi.UnitState.t</a>]}</li>
+        <li>list_unit_states(pid, opts :: [{atom, <a href="http://elixir-lang.org/docs/stable/elixir/String.html#t:t/0">String.t</a>}]) :: {:ok, [<a href="FleetApi.UnitState.html#t:t/0">FleetApi.UnitState.t</a>]} | {:error, any}</li>
       
     </ul>
   
@@ -180,7 +180,7 @@ the response to a particular host or unit.</p>
     <p>Specs:</p>
     <ul class="spec">
       
-        <li>list_units(pid) :: {:ok, [<a href="FleetApi.Unit.html#t:t/0">FleetApi.Unit.t</a>]}</li>
+        <li>list_units(pid) :: {:ok, [<a href="FleetApi.Unit.html#t:t/0">FleetApi.Unit.t</a>]} | {:error, any}</li>
       
     </ul>
   
@@ -205,7 +205,7 @@ the response to a particular host or unit.</p>
     <p>Specs:</p>
     <ul class="spec">
       
-        <li>set_unit(pid, unit_name :: <a href="http://elixir-lang.org/docs/stable/elixir/String.html#t:t/0">String.t</a>, <a href="FleetApi.Unit.html#t:t/0">FleetApi.Unit.t</a>) :: :ok</li>
+        <li>set_unit(pid, unit_name :: <a href="http://elixir-lang.org/docs/stable/elixir/String.html#t:t/0">String.t</a>, <a href="FleetApi.Unit.html#t:t/0">FleetApi.Unit.t</a>) :: :ok | {:error, any}</li>
       
     </ul>
   
