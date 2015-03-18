@@ -14,8 +14,8 @@ defmodule FleetApi.Error do
   @spec from_map(%{String.t => any}) :: FleetApi.Error.t
   def from_map(error_map) do
     %__MODULE__{
-      code: error_map["code"],
-      message: error_map["message"]
+      code: error_map["error"]["code"],
+      message: error_map["error"]["message"]
     }
   end
 end

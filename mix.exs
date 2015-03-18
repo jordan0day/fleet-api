@@ -3,7 +3,7 @@ defmodule FleetApi.Mixfile do
 
   def project do
     [app: :fleet_api,
-     version: "0.0.2",
+     version: "0.0.3",
      elixir: "~> 1.0",
      deps: deps,
      description: description,

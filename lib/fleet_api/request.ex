@@ -13,11 +13,11 @@ defmodule FleetApi.Request do
         end
 
         case HTTPoison.request(method, url, body, headers, options) do
-          {:ok, %HTTPoison.Response{status_code: status} = response} when status in [400..599] ->
+          {:ok, %HTTPoison.Response{:status_code => status} = response} when status in 400..599 ->
             if String.length(response.body) != 0 do
               error = response.body
                       |> Poison.decode!
-                      |> Error.from_map
+                      |> FleetApi.Error.from_map
               {:error, error}
             else
               {:error, response}
@@ -30,7 +30,7 @@ defmodule FleetApi.Request do
                 {:ok, nil}
               end
             else
-              {:error, "Expected response status in #{inspect expected_status} but got #{response.status_code}"}
+              {:error, "Expected response status in #{inspect expected_status} but got #{status}."}
             end
           error -> error
         end

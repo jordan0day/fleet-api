@@ -44,6 +44,7 @@ defmodule FleetApi.Api do
                     |> Enum.filter(fn unit -> unit != nil end)
                     |> Enum.map(&Unit.from_map/1)
             {:ok, units}
+          other -> other
         end
       end
 
@@ -55,6 +56,7 @@ defmodule FleetApi.Api do
             unit = resp_body
                    |> Unit.from_map
             {:ok, unit}
+          other -> other
         end
       end
 
@@ -63,6 +65,7 @@ defmodule FleetApi.Api do
       defp api_delete_unit(node_url, unit_name) do
        case request(:delete, node_url <> "/fleet/v1/units/" <> unit_name, [], "", [204]) do
           {:ok, _} -> :ok
+          other -> other
         end
       end
 
@@ -71,6 +74,7 @@ defmodule FleetApi.Api do
       defp api_set_unit(node_url, unit_name, unit) do
         case request(:put, node_url <> "/fleet/v1/units/" <> unit_name, [{"Content-Type", "application/json"}], Poison.encode!(unit), [201, 204]) do
           {:ok, _} -> :ok
+          other -> other
         end
       end
 
@@ -94,6 +98,7 @@ defmodule FleetApi.Api do
                      |> Enum.flat_map(fn resp -> resp["states"] end)
                      |> Enum.map(&UnitState.from_map/1)
             {:ok, states}
+          other -> other
         end
       end
 
@@ -107,6 +112,7 @@ defmodule FleetApi.Api do
                        |> Enum.map(&Machine.from_map/1)
 
             {:ok, machines}
+          other -> other
         end
       end
 
@@ -114,7 +120,7 @@ defmodule FleetApi.Api do
       defp api_discovery(node_url) do
         case request(:get, node_url <> "/fleet/v1/discovery") do
           {:ok, discovery} -> {:ok, discovery}
-          {:error, _} -> :error
+          other -> other
         end
       end
     end
