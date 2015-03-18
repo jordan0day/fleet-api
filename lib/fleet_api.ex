@@ -28,6 +28,9 @@ defmodule FleetApi do
 
   @doc """
   Get the detailed state information for all the units in the Fleet cluster.
+
+  You may optionally provide options `machineID` and/or `unitName` to filter
+  the response to a particular host or unit.
   """
   defcallback list_unit_states(pid, opts :: [{atom, String.t}]) :: {:ok, [FleetApi.UnitState.t]}
 
