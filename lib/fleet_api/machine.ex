@@ -21,4 +21,18 @@ defmodule FleetApi.Machine do
       metadata: machine_map["metadata"]
     }
   end
+
+  @doc """
+  Checks if this machine is responding to requests by attempting to access the
+  API discovery endpoint of the Fleet API.
+  """
+  @spec reachable?(FleetApi.Machine.t, integer) :: boolean
+  def reachable?(machine, port \\ 7002) do
+    {:ok, pid} = FleetApi.Direct.start_link("http://#{machine.primaryIP}:#{port}")
+
+    case FleetApi.Direct.get_api_discovery(pid) do
+      {:ok, _} -> true
+      _ -> false
+    end
+  end
 end

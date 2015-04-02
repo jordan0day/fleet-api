@@ -25,7 +25,7 @@
     </script>
 
     <section id="content">
-      <div class="breadcrumbs">fleet_api v0.0.3 &rarr; <a href="overview.html">Overview</a> &rarr; <a href="FleetApi.html">FleetApi</a> &rarr; <a href="FleetApi.Etcd.html">Etcd</a></div>
+      <div class="breadcrumbs">fleet_api v0.0.4 &rarr; <a href="overview.html">Overview</a> &rarr; <a href="FleetApi.html">FleetApi</a> &rarr; <a href="FleetApi.Etcd.html">Etcd</a></div>
       <h1>
         FleetApi.Etcd
         
@@ -65,6 +65,13 @@
   
 </tr>
 <tr>
+  <td class="summary_signature"><a href="#get_api_discovery/1">get_api_discovery(pid)</a></td>
+  
+    <td class="summary_synopsis"><p>Callback implementation for <a href="FleetApi.html#c:get_api_discovery/1"><code class="inline">FleetApi.get_api_discovery/1</code></a></p>
+</td>
+  
+</tr>
+<tr>
   <td class="summary_signature"><a href="#get_node_url/1">get_node_url(pid)</a></td>
   
     <td class="summary_synopsis"><p>Retrieves a Fleet node URL based on the information stored in etcd, using the
@@ -96,7 +103,8 @@ etcd token specified when the GenServer was started</p>
 <tr>
   <td class="summary_signature"><a href="#list_units/1">list_units(pid)</a></td>
   
-    <td class="summary_synopsis"></td>
+    <td class="summary_synopsis"><p>Callback implementation for <a href="FleetApi.html#c:list_units/1"><code class="inline">FleetApi.list_units/1</code></a></p>
+</td>
   
 </tr>
 <tr>
@@ -131,6 +139,24 @@ etcd token specified when the GenServer was started</p>
   
   <section class="docstring">
     <p>Callback implementation for <a href="FleetApi.html#c:delete_unit/2"><code class="inline">FleetApi.delete_unit/2</code></a>.</p>
+
+  </section>
+  
+    <a href="https://github.com/jordan0day/fleet-api/blob/master/lib/fleet_api/etcd.ex#L5" class="view_source">Source</a>
+  
+</section>
+<section class="detail">
+  <div class="detail_header" id="get_api_discovery/1">
+    <span class="signature"><strong>get_api_discovery(pid)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#get_api_discovery/1" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>Callback implementation for <a href="FleetApi.html#c:get_api_discovery/1"><code class="inline">FleetApi.get_api_discovery/1</code></a>.</p>
 
   </section>
   
@@ -228,7 +254,8 @@ etcd token specified when the GenServer was started.</p>
   </div>
   
   <section class="docstring">
-    
+    <p>Callback implementation for <a href="FleetApi.html#c:list_units/1"><code class="inline">FleetApi.list_units/1</code></a>.</p>
+
   </section>
   
     <a href="https://github.com/jordan0day/fleet-api/blob/master/lib/fleet_api/etcd.ex#L5" class="view_source">Source</a>

@@ -39,14 +39,16 @@ defmodule FleetApi do
   """
   defcallback list_machines(pid) :: {:ok, [FleetApi.Machine.t]} | {:error, any}
 
+  @doc """
+  Retrieve the API Discovery document JSON for the Fleet API.
+  """
+  defcallback get_api_discovery(pid) :: {:ok, Map.t} | {:error, any}
+
   defmacro __using__(_) do
     quote do
       use FleetApi.Api
       @behaviour FleetApi
 
-      @doc """
-      
-      """
       def list_units(pid) do
         pid
         |> get_node_url
@@ -81,6 +83,12 @@ defmodule FleetApi do
         pid
         |> get_node_url
         |> api_list_machines
+      end
+
+      def get_api_discovery(pid) do
+        pid
+        |> get_node_url
+        |> api_discovery
       end
 
       @doc """

@@ -166,4 +166,15 @@ defmodule FleetApi.Etcd.Test do
       assert :ok = set_unit(pid, "test.service", "launched")
     end
   end
+
+  test "get_api_discovery" do
+    use_cassette "etcd_get_api_discovery", custom: true do
+      {:ok, pid} = FleetApi.Etcd.start_link("abcd1234")
+      {:ok, discovery} = get_api_discovery(pid)
+
+      assert discovery["discoveryVersion"] == "v1"
+      assert discovery["id"] == "fleet:v1"
+      assert discovery["title"] == "fleet API"
+    end
+  end
 end
