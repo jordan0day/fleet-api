@@ -1,0 +1,14 @@
+[
+  {
+    "request": {
+      "url": "http://localhost:7002/fleet/v1/units/subgun-http.service"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": "{\"currentState\":\"launched\",\"desiredState\":\"launched\",\"machineID\":\"820c30c0867844129d63f4409871ba39\",\"name\":\"subgun-http.service\",\"options\":null}"
+    }
+  }
+]

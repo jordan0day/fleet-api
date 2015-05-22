@@ -80,6 +80,33 @@ defmodule FleetApi.Direct.Test do
     end
   end
 
+  test "list_units empty list" do
+    use_cassette "list_units_empty", custom: true do
+      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+      {:ok, units} = list_units(pid)
+
+      assert 0 == length(units)
+    end
+  end
+
+  test "list_units nil list instead of empty list" do
+    use_cassette "list_units_null", custom: true do
+      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+      {:ok, units} = list_units(pid)
+
+      assert 0 == length(units)
+    end
+  end
+
+  test "list_units no units field in response" do
+    use_cassette "list_units_weird_response", custom: true do
+      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+      {:ok, units} = list_units(pid)
+
+      assert 0 == length(units)
+    end
+  end
+
   test "get_unit" do
     use_cassette "get_unit", custom: true do
       {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
@@ -89,6 +116,42 @@ defmodule FleetApi.Direct.Test do
       assert "launched" == unit.currentState
       assert "launched" == unit.desiredState
       assert %FleetApi.UnitOption{name: "Description", section: "Unit", value: "subgun"} in unit.options
+    end
+  end
+
+  test "get_unit empty options list" do
+    use_cassette "get_unit_empty_options", custom: true do
+      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+      {:ok, unit} = get_unit(pid, "subgun-http.service")
+
+      assert "subgun-http.service" == unit.name
+      assert "launched" == unit.currentState
+      assert "launched" == unit.desiredState
+      assert length(unit.options) == 0
+    end
+  end
+
+  test "get_unit null options list" do
+    use_cassette "get_unit_null_options", custom: true do
+      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+      {:ok, unit} = get_unit(pid, "subgun-http.service")
+
+      assert "subgun-http.service" == unit.name
+      assert "launched" == unit.currentState
+      assert "launched" == unit.desiredState
+      assert length(unit.options) == 0
+    end
+  end
+
+  test "get_unit missing options list" do
+    use_cassette "get_unit_missing_options", custom: true do
+      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+      {:ok, unit} = get_unit(pid, "subgun-http.service")
+
+      assert "subgun-http.service" == unit.name
+      assert "launched" == unit.currentState
+      assert "launched" == unit.desiredState
+      assert length(unit.options) == 0
     end
   end
 
@@ -123,6 +186,33 @@ defmodule FleetApi.Direct.Test do
     end
   end
 
+  test "list_machines empty machine list" do
+    use_cassette "list_machines_empty", custom: true do
+      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+      {:ok, machines} = list_machines(pid)
+
+      assert length(machines) == 0
+    end
+  end
+
+  test "list_machines null machine list" do
+    use_cassette "list_machines_null", custom: true do
+      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+      {:ok, machines} = list_machines(pid)
+
+      assert length(machines) == 0
+    end
+  end
+
+  test "list_machines no machines field in response" do
+    use_cassette "list_machines_weird_response", custom: true do
+      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+      {:ok, machines} = list_machines(pid)
+
+      assert length(machines) == 0
+    end
+  end
+
   test "list_unit_states" do
     use_cassette "list_unit_states", custom: true do
       {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
@@ -137,6 +227,33 @@ defmodule FleetApi.Direct.Test do
         systemdActiveState: "active",
         systemdLoadState: "loaded",
         systemdSubState: "running"} in states
+    end
+  end
+
+  test "list_unit_states empty states list" do
+    use_cassette "list_unit_states_empty", custom: true do
+      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+      {:ok, states} = list_unit_states(pid)
+
+      assert length(states) == 0
+    end
+  end
+
+  test "list_unit_states null states list" do
+    use_cassette "list_unit_states_null", custom: true do
+      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+      {:ok, states} = list_unit_states(pid)
+
+      assert length(states) == 0
+    end
+  end
+
+  test "list_unit_states missing states list" do
+    use_cassette "list_unit_states_weird_response", custom: true do
+      {:ok, pid} = FleetApi.Direct.start_link("http://localhost:7002")
+      {:ok, states} = list_unit_states(pid)
+
+      assert length(states) == 0
     end
   end
 

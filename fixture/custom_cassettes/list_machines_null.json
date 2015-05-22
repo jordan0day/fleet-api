@@ -1,0 +1,14 @@
+[
+  {
+    "request": {
+      "url": "http://localhost:7002/fleet/v1/machines"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": "{\"machines\":null}"
+    }
+  }
+]

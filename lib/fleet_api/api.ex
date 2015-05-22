@@ -95,7 +95,7 @@ defmodule FleetApi.Api do
         case paginated_request(:get, url, [], "") do
           {:ok, resp_bodies} ->
             states = resp_bodies
-                     |> Enum.flat_map(fn resp -> resp["states"] end)
+                     |> Enum.flat_map(fn resp -> resp["states"] || [] end)
                      |> Enum.map(&UnitState.from_map/1)
             {:ok, states}
           other -> other
@@ -108,7 +108,7 @@ defmodule FleetApi.Api do
         case paginated_request(:get, node_url <> "/fleet/v1/machines", [], "") do
           {:ok, resp_bodies} ->
             machines = resp_bodies
-                       |> Enum.flat_map(fn resp -> resp["machines"] end)
+                       |> Enum.flat_map(fn resp -> resp["machines"] || [] end)
                        |> Enum.map(&Machine.from_map/1)
 
             {:ok, machines}

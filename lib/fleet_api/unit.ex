@@ -19,7 +19,7 @@ defmodule FleetApi.Unit do
   def from_map(unit_map) do
     %__MODULE__{
       name: unit_map["name"],
-      options: unit_map["options"] |> Enum.map(&UnitOption.from_map/1),
+      options: (unit_map["options"] || []) |> Enum.map(&UnitOption.from_map/1),
       desiredState: unit_map["desiredState"],
       currentState: unit_map["currentState"],
       machineID: unit_map["machineID"]
