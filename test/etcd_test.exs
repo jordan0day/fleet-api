@@ -80,6 +80,33 @@ defmodule FleetApi.Etcd.Test do
     end
   end
 
+  test "list_units empty list" do
+    use_cassette "etcd_list_units_empty", custom: true do
+      {:ok, pid} = FleetApi.Etcd.start_link("abcd1234")
+      {:ok, units} = list_units(pid)
+
+      assert 0 == length(units)
+    end
+  end
+
+  test "list_units nil list instead of empty list" do
+    use_cassette "etcd_list_units_null", custom: true do
+      {:ok, pid} = FleetApi.Etcd.start_link("abcd1234")
+      {:ok, units} = list_units(pid)
+
+      assert 0 == length(units)
+    end
+  end
+
+  test "list_units no units field in response" do
+    use_cassette "etcd_list_units_weird_response", custom: true do
+      {:ok, pid} = FleetApi.Etcd.start_link("abcd1234")
+      {:ok, units} = list_units(pid)
+
+      assert 0 == length(units)
+    end
+  end
+
   test "get_unit" do
     use_cassette "etcd_get_unit", custom: true do
       {:ok, pid} = FleetApi.Etcd.start_link("abcd1234")

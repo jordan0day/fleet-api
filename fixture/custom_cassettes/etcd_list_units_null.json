@@ -1,0 +1,38 @@
+[
+  {
+    "request": {
+      "url": "https://discovery.etcd.io/abcd1234"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": "{\"action\":\"get\",\"node\":{\"key\":\"/_etcd/registry/abcd1234\",\"dir\":true,\"nodes\":[{\"value\":\"http://127.0.0.1:7001\"},{\"value\":\"http://127.0.0.2:7001\"},{\"value\":\"http://127.0.0.3:7001\"}],\"modifiedIndex\":381975809,\"createdIndex\":381975809}}"
+    }
+  },
+  {
+    "request": {
+      "url": "http://127.0.0.1:7002/fleet/v1/discovery"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": ""
+    }
+  },
+  {
+    "request": {
+      "url": "http://127.0.0.1:7002/fleet/v1/units"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": "{\"units\":null}"
+    }
+  }
+]

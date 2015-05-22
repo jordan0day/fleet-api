@@ -40,7 +40,7 @@ defmodule FleetApi.Api do
         case paginated_request(:get, node_url <> "/fleet/v1/units", [], "") do
           {:ok, resp_bodies} ->
             units = resp_bodies
-                    |> Enum.flat_map(fn resp -> resp["units"] end)
+                    |> Enum.flat_map(fn resp -> resp["units"] || [] end)
                     |> Enum.filter(fn unit -> unit != nil end)
                     |> Enum.map(&Unit.from_map/1)
             {:ok, units}
