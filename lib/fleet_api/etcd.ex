@@ -22,7 +22,7 @@ defmodule FleetApi.Etcd do
   """
   @spec get_node_url(pid) :: String.t | {:error, any}
   def get_node_url(pid) do
-    case GenServer.call(pid, :get_node_url) do
+    case GenServer.call(pid, :get_node_url, 10_000) do
       {:ok, node_url} -> 
         node_url
         |> fix_etcd_node_url
