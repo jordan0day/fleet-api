@@ -49,46 +49,55 @@ defmodule FleetApi do
       use FleetApi.Api
       @behaviour FleetApi
 
+      # To handle errors that may occur inside get_node_url, we'll wrap any
+      # calls to API functions with call_with_url, which will either return
+      # with the error info, or pass the resolved URL on down to the API func.
+      defp call_with_url({:error, reason}, _fn), do: {:error, reason}
+
+      defp call_with_url(node_url, fun) do
+        fun.(node_url)
+      end
+
       def list_units(pid) do
         pid
         |> get_node_url
-        |> api_list_units
+        |> call_with_url(&api_list_units/1)
       end
 
       def get_unit(pid, unit_name) do
         pid
         |> get_node_url
-        |> api_get_unit(unit_name)
+        |> call_with_url(&(api_get_unit(&1, unit_name)))
       end
 
       def delete_unit(pid, unit_name) do
         pid
         |> get_node_url
-        |> api_delete_unit(unit_name)
+        |> call_with_url(&(api_delete_unit(&1, unit_name)))
       end
 
       def set_unit(pid, unit_name, unit) do
         pid
         |> get_node_url
-        |> api_set_unit(unit_name, unit)
+        |> call_with_url(&(api_set_unit(&1, unit_name, unit)))
       end
 
       def list_unit_states(pid, opts \\ []) do
         pid
         |> get_node_url
-        |> api_list_unit_states(opts)
+        |> call_with_url(&(api_list_unit_states(&1, opts)))
       end
 
       def list_machines(pid) do
         pid
         |> get_node_url
-        |> api_list_machines
+        |> call_with_url(&api_list_machines/1)
       end
 
       def get_api_discovery(pid) do
         pid
         |> get_node_url
-        |> api_discovery
+        |> call_with_url(&api_discovery/1)
       end
 
       @doc """

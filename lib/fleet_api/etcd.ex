@@ -20,16 +20,14 @@ defmodule FleetApi.Etcd do
   Retrieves a Fleet node URL based on the information stored in etcd, using the
   etcd token specified when the GenServer was started.
   """
-  @spec get_node_url(pid) :: String.t
+  @spec get_node_url(pid) :: String.t | {:error, any}
   def get_node_url(pid) do
     case GenServer.call(pid, :get_node_url) do
       {:ok, node_url} -> 
         node_url
         |> fix_etcd_node_url
-      {:error, :no_valid_nodes} ->
-        raise "No valid nodes were found."
-      {:error, reason} ->
-        raise "An error occurred finding etcd nodes: #{inspect reason}"
+
+      error -> error
     end
   end
 
@@ -78,7 +76,7 @@ defmodule FleetApi.Etcd do
   defp refresh_nodes(etcd_token) do
     case request(:get, "https://discovery.etcd.io/#{etcd_token}", [{"Accept", "application/json"}]) do
       {:ok, %{"node" => node}} ->
-        nodes = for n <- node["nodes"], do: n["value"]
+        nodes = for n <- node["nodes"] || [], do: n["value"]
         {:ok, nodes}
       {:error, error} -> {:error, error.reason}
     end
