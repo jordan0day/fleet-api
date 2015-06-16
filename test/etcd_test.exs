@@ -204,4 +204,12 @@ defmodule FleetApi.Etcd.Test do
       assert discovery["title"] == "fleet API"
     end
   end
+
+  test "list_units no etcd nodes available" do
+    use_cassette "etcd_response_no_nodes", custom: true do
+      {:ok, pid} = FleetApi.Etcd.start_link("abcd1234")
+
+      assert {:error, :no_valid_nodes} == FleetApi.Etcd.list_units(pid)
+    end
+  end
 end
