@@ -18,9 +18,9 @@ defmodule FleetApi.Request do
               error = response.body
                       |> Poison.decode!
                       |> FleetApi.Error.from_map
-              {:error, error}
+              {:error, %{reason: error}}
             else
-              {:error, response}
+              {:error, %{reason: "Received #{status} response."}}
             end
           {:ok, %HTTPoison.Response{status_code: status} = response} ->
             if status in expected_status do
@@ -30,7 +30,7 @@ defmodule FleetApi.Request do
                 {:ok, nil}
               end
             else
-              {:error, "Expected response status in #{inspect expected_status} but got #{status}."}
+              {:error, %{reason: "Expected response status in #{inspect expected_status} but got #{status}."}}
             end
           error -> error
         end

@@ -212,4 +212,12 @@ defmodule FleetApi.Etcd.Test do
       assert {:error, :no_valid_nodes} == FleetApi.Etcd.list_units(pid)
     end
   end
+
+  test "list_units refresh_nodes call gets 503" do
+    use_cassette "etcd_response_503_response", custom: true do
+      {:ok, pid} = FleetApi.Etcd.start_link("abcd1234")
+
+      assert {:error, "Received 503 response."} == FleetApi.Etcd.list_units(pid)
+    end
+  end
 end

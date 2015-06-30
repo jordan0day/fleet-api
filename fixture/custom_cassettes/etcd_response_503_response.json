@@ -1,0 +1,14 @@
+[
+  {
+    "request": {
+      "url": "https://discovery.etcd.io/abcd1234"
+    },
+    "response": {
+      "status_code": 503,
+      "headers": {
+        "Content-Length": "0"
+      },
+      "body": ""
+    }
+  },
+]
