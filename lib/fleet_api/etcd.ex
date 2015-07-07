@@ -2,6 +2,7 @@ defmodule FleetApi.Etcd do
   @moduledoc """
   Accesses the Fleet API via a URL discovered through etcd.  
   """
+  require Logger
   use FleetApi
   use GenServer
 
@@ -59,13 +60,16 @@ defmodule FleetApi.Etcd do
     if valid_state?(state) do
       {:ok, state}
     else
+      Logger.debug "Refreshing list of etcd nodes, attempt: #{attempts}."
       case refresh_nodes(state.etcd_token) do
         {:ok, nodes} ->
+          Logger.debug "Successfully retrieved list of #{length nodes} etcd nodes."
           {:ok, %{state | nodes: nodes, last_updated: :os.timestamp}}
         {:error, reason} ->
           if attempts < 5 do
             get_state(state, attempts + 1)
           else
+            Logger.error "Couldn't refresh list of etcd nodes after 5 attempts. Failing."
             {:error, reason}
           end
       end
@@ -74,11 +78,40 @@ defmodule FleetApi.Etcd do
 
   @spec refresh_nodes(String.t) :: [String.t]
   defp refresh_nodes(etcd_token) do
-    case request(:get, "https://discovery.etcd.io/#{etcd_token}", [{"Accept", "application/json"}]) do
-      {:ok, %{"node" => node}} ->
-        nodes = for n <- node["nodes"] || [], do: n["value"]
-        {:ok, nodes}
-      {:error, error} -> {:error, error.reason}
+    Logger.debug("Refreshing nodes for etcd token: #{etcd_token}")
+    try do
+      case request(:get, "https://discovery.etcd.io/#{etcd_token}", [{"Accept", "application/json"}]) do
+        {:ok, %{"node" => node}} ->
+          nodes = for n <- node["nodes"] || [], do: n["value"]
+          {:ok, nodes}
+        {:error, error} ->
+          Logger.error "An error occurred refreshing the list of etcd nodes: #{inspect error}."
+          {:error, error.reason}
+      end
+    rescue e ->
+      Logger.error "An exception was raised during the request to etcd: #{inspect e}"
+      Logger.debug "Issuing a request to google just to check httpoison..."
+      test_httpoison_request()
+
+      {:error, e}
+    catch e ->
+      Logger.error "refresh_node request threw: #{inspect e}."
+      {:error, e}
+    end
+  end
+
+  defp test_httpoison_request() do
+    try do
+      case request(:get, "https://google.com") do
+        {:ok, result} ->
+          Logger.debug "google.com request succeeded: #{inspect result}"
+        {:error, error} ->
+          Logger.warn "google.com request failed: #{inspect error}"
+      end
+    rescue e ->
+      Logger.warn "google.com request raised an exception: #{inspect e}"
+    catch e ->
+      Logger.error "google.com request threw: #{inspect e}."
     end
   end
 
