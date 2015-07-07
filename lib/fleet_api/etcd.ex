@@ -102,7 +102,7 @@ defmodule FleetApi.Etcd do
 
   defp test_httpoison_request() do
     try do
-      case request(:get, "https://google.com") do
+      case request(:get, "https://google.com", [], "", 200..399, false) do
         {:ok, result} ->
           Logger.debug "google.com request succeeded: #{inspect result}"
         {:error, error} ->

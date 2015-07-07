@@ -5,8 +5,8 @@ defmodule FleetApi.Request do
       # Issue a request to the specified url, optionally passing a list of header
       # tuples and a body. The method argument specifies the HTTP method in the
       # form of an atom, e.g. :get, :post, :delete, etc.
-      @spec request(atom, String.t, [tuple], String.t, [integer]) :: {:ok, any} | {:error, any}
-      defp request(method, url, headers \\ [], body \\ "", expected_status \\ [200]) do
+      @spec request(atom, String.t, [tuple], String.t, [integer], boolean) :: {:ok, any} | {:error, any}
+      defp request(method, url, headers \\ [], body \\ "", expected_status \\ [200], parse_response \\ true) do
         options = case Application.get_env(:fleet_api, :proxy) do
           nil -> []
           proxy_opts -> [hackney: [proxy: proxy_opts]]
@@ -24,10 +24,10 @@ defmodule FleetApi.Request do
             end
           {:ok, %HTTPoison.Response{status_code: status} = response} ->
             if status in expected_status do
-              if String.length(response.body) != 0 do
+              if String.length(response.body) != 0 && parse_response do
                 {:ok, Poison.decode!(response.body)}
               else
-                {:ok, nil}
+                {:ok, response}
               end
             else
               {:error, %{reason: "Expected response status in #{inspect expected_status} but got #{status}."}}
