@@ -23,7 +23,7 @@ defmodule FleetApi.Etcd do
   """
   @spec get_node_url(pid) :: String.t | {:error, any}
   def get_node_url(pid) do
-    case GenServer.call(pid, :get_node_url, 10_000) do
+    case GenServer.call(pid, :get_node_url, 60_000) do
       {:ok, node_url} -> 
         node_url
         |> fix_etcd_node_url
@@ -45,8 +45,12 @@ defmodule FleetApi.Etcd do
     case get_state(state) do
       {:ok, state} ->
         case get_valid_node(state.nodes) do
-          nil -> {:reply, {:error, :no_valid_nodes}, state}
-          node -> {:reply, {:ok, node}, state}
+          nil ->
+            Logger.error "[FleetApi] Node list contained no valid nodes!"
+            {:reply, {:error, :no_valid_nodes}, state}
+          node ->
+            Logger.debug "[FleetApi] Confirmed node #{inspect node} was valid."
+            {:reply, {:ok, node}, state}
         end
       {:error, reason} ->
         {:reply, {:error, reason}, state}
@@ -60,16 +64,16 @@ defmodule FleetApi.Etcd do
     if valid_state?(state) do
       {:ok, state}
     else
-      Logger.debug "Refreshing list of etcd nodes, attempt: #{attempts}."
+      Logger.debug "[FleetApi] Refreshing list of etcd nodes, attempt: #{attempts}."
       case refresh_nodes(state.etcd_token) do
         {:ok, nodes} ->
-          Logger.debug "Successfully retrieved list of #{length nodes} etcd nodes."
+          Logger.debug "[FleetApi] Successfully retrieved list of #{length nodes} etcd nodes."
           {:ok, %{state | nodes: nodes, last_updated: :os.timestamp}}
         {:error, reason} ->
           if attempts < 5 do
             get_state(state, attempts + 1)
           else
-            Logger.error "Couldn't refresh list of etcd nodes after 5 attempts. Failing."
+            Logger.error "[FleetApi] Couldn't refresh list of etcd nodes after 5 attempts. Failing."
             {:error, reason}
           end
       end
@@ -78,24 +82,24 @@ defmodule FleetApi.Etcd do
 
   @spec refresh_nodes(String.t) :: [String.t]
   defp refresh_nodes(etcd_token) do
-    Logger.debug("Refreshing nodes for etcd token: #{etcd_token}")
+    Logger.debug "[FleetApi] Refreshing nodes for etcd token: #{etcd_token}"
     try do
       case request(:get, "https://discovery.etcd.io/#{etcd_token}", [{"Accept", "application/json"}]) do
         {:ok, %{"node" => node}} ->
           nodes = for n <- node["nodes"] || [], do: n["value"]
           {:ok, nodes}
         {:error, error} ->
-          Logger.error "An error occurred refreshing the list of etcd nodes: #{inspect error}."
+          Logger.error "[FleetApi] An error occurred refreshing the list of etcd nodes: #{inspect error}."
           {:error, error.reason}
       end
     rescue e ->
-      Logger.error "An exception was raised during the request to etcd: #{inspect e}"
-      Logger.debug "Issuing a request to google just to check httpoison..."
+      Logger.error "[FleetApi] An exception was raised during the request to etcd: #{inspect e}"
+      Logger.debug "[FleetApi] Issuing a request to google just to check httpoison..."
       test_httpoison_request()
 
       {:error, e}
     catch e ->
-      Logger.error "refresh_node request threw: #{inspect e}."
+      Logger.error "[FleetApi] refresh_node request threw: #{inspect e}."
       {:error, e}
     end
   end
@@ -104,20 +108,21 @@ defmodule FleetApi.Etcd do
     try do
       case request(:get, "https://google.com", [], "", 200..399, false) do
         {:ok, result} ->
-          Logger.debug "google.com request succeeded: #{inspect result}"
+          Logger.debug "[FleetApi] google.com request succeeded: #{inspect result}"
         {:error, error} ->
-          Logger.warn "google.com request failed: #{inspect error}"
+          Logger.warn "[FleetApi] google.com request failed: #{inspect error}"
       end
     rescue e ->
-      Logger.warn "google.com request raised an exception: #{inspect e}"
+      Logger.warn "[FleetApi] google.com request raised an exception: #{inspect e}"
     catch e ->
-      Logger.error "google.com request threw: #{inspect e}."
+      Logger.error "[FleetApi] google.com request threw: #{inspect e}."
     end
   end
 
   # finds the first node for which the discovery endpoint returns data.
   @spec get_valid_node([String.t]) :: String.t | nil
   defp get_valid_node(nodes) do
+    Logger.debug "[FleetApi] Validating list of nodes..."
     nodes
     |> Enum.find(fn node ->
       node
