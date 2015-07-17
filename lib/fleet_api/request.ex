@@ -13,11 +13,14 @@ defmodule FleetApi.Request do
           proxy_opts -> [hackney: [proxy: proxy_opts]]
         end
 
-        Logger.debug "[FleetApi] issuing request to #{url}"
+        request_id = UUID.uuid1()
+                     |> String.slice(0..7)
+
+        Logger.debug "[FleetApi] issuing request #{request_id} to #{url}"
 
         case HTTPoison.request(method, url, body, headers, options) do
           {:ok, %HTTPoison.Response{:status_code => status} = response} when status in 400..599 ->
-            Logger.error "[FleetApi] request to #{url} returned status code #{inspect status}"
+            Logger.error "[FleetApi] request #{request_id} to #{url} returned status code #{inspect status}"
             if String.length(response.body) != 0 do
               error = response.body
                       |> Poison.decode!
@@ -35,11 +38,11 @@ defmodule FleetApi.Request do
                 {:ok, response}
               end
             else
-              Logger.error "[FleetApi] request to #{url} returned status code #{inspect status}"
+              Logger.error "[FleetApi] request #{request_id} to #{url} returned status code #{inspect status}"
               {:error, %{reason: "Expected response status in #{inspect expected_status} but got #{status}."}}
             end
           error ->
-            Logger.error "[FleetApi] request to #{url} did not complete. Error: #{inspect error}."
+            Logger.error "[FleetApi] request #{request_id} to #{url} did not complete. Error: #{inspect error}."
             error
         end
       end

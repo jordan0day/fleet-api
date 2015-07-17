@@ -3,7 +3,7 @@ defmodule FleetApi.Mixfile do
 
   def project do
     [app: :fleet_api,
-     version: "0.0.11",
+     version: "0.0.12",
      elixir: "~> 1.0",
      deps: deps,
      description: description,
@@ -34,6 +34,7 @@ defmodule FleetApi.Mixfile do
     [
       {:httpoison, "0.6.2"},
       {:poison, "1.3.1"},
+      {:uuid, "~> 1.0"},
       {:exvcr, "0.4.0", only: :test},
       {:earmark, "~> 0.1", only: :dev},
       {:ex_doc, "~> 0.7", only: :dev}]

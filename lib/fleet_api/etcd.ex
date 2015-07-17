@@ -124,6 +124,7 @@ defmodule FleetApi.Etcd do
   defp get_valid_node(nodes) do
     Logger.debug "[FleetApi] Validating list of nodes..."
     nodes
+    |> Enum.shuffle
     |> Enum.find(fn node ->
       node
       |> fix_etcd_node_url
