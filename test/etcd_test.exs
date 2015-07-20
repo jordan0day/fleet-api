@@ -220,4 +220,17 @@ defmodule FleetApi.Etcd.Test do
       assert {:error, "Received 503 response."} == FleetApi.Etcd.list_units(pid)
     end
   end
+
+  test "list_units multiple calls only calls etcd and discovery once" do
+    use_cassette "etcd_list_units_multiple_calls", custom: true do
+      {:ok, pid} = FleetApi.Etcd.start_link("abcd1234")
+
+      {:ok, units} = list_units(pid)
+
+      assert 4 == length(units)
+
+      {:ok, units} = list_units(pid)
+      {:ok, units} = list_units(pid)
+    end
+  end
 end

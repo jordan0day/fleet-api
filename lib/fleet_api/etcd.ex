@@ -45,12 +45,12 @@ defmodule FleetApi.Etcd do
     case get_state(state) do
       {:ok, state} ->
         case get_valid_node(state.nodes) do
-          nil ->
+          {nil, nodes} ->
             Logger.error "[FleetApi] Node list contained no valid nodes!"
-            {:reply, {:error, :no_valid_nodes}, state}
-          node ->
-            Logger.debug "[FleetApi] Confirmed node #{inspect node} was valid."
-            {:reply, {:ok, node}, state}
+            {:reply, {:error, :no_valid_nodes}, Map.put(state, :nodes, nodes)}
+          {node_url, nodes} ->
+            Logger.debug "[FleetApi] Confirmed node #{inspect node_url} was valid."
+            {:reply, {:ok, node_url}, Map.put(state, :nodes, nodes)}
         end
       {:error, reason} ->
         {:reply, {:error, reason}, state}
@@ -67,8 +67,9 @@ defmodule FleetApi.Etcd do
       Logger.debug "[FleetApi] Refreshing list of etcd nodes, attempt: #{attempts}."
       case refresh_nodes(state.etcd_token) do
         {:ok, nodes} ->
+          node_maps = for node_url <- nodes, do: %{ url: node_url, is_valid: nil }
           Logger.debug "[FleetApi] Successfully retrieved list of #{length nodes} etcd nodes."
-          {:ok, %{state | nodes: nodes, last_updated: :os.timestamp}}
+          {:ok, %{state | nodes: node_maps, last_updated: :os.timestamp}}
         {:error, reason} ->
           if attempts < 5 do
             get_state(state, attempts + 1)
@@ -120,20 +121,54 @@ defmodule FleetApi.Etcd do
   end
 
   # finds the first node for which the discovery endpoint returns data.
-  @spec get_valid_node([String.t]) :: String.t | nil
+  @spec get_valid_node([Map.t]) :: {String.t | nil, [Map.t]}
   defp get_valid_node(nodes) do
-    Logger.debug "[FleetApi] Validating list of nodes..."
-    nodes
-    |> Enum.shuffle
-    |> Enum.find(fn node ->
-      node
-      |> fix_etcd_node_url
-      |> api_discovery
-      |> case do
-        {:ok, _discovery} -> true
-        _ -> false
+    Logger.debug "[FleetApi] Finding a valid node..."
+    filtered = Enum.filter(nodes, fn node -> node.is_valid != false end)
+    get_valid_node(nodes, filtered)
+  end
+
+  @spec get_valid_node([Map.t], [Map.t]) :: {String.t | nil, [Map.t]}
+  defp get_valid_node(nodes, candidates) when length(candidates) > 0 do
+    # Seed the RNG
+    :random.seed(:os.timestamp)
+    node = candidates
+            |> Enum.shuffle
+            |> List.first
+
+    if node.is_valid == true do
+      {node.url, nodes}
+    else
+      is_valid = validate_node(node.url)
+
+      # Update our nodes list now that we know if this node is valid or not
+      index = Enum.find_index(nodes, fn n -> n.url == node.url end)
+      node = Map.put(node, :is_valid, is_valid)
+      nodes = List.replace_at(nodes, index, node)
+
+      if is_valid do
+        {node.url, nodes}
+      else
+        # Since this node isn't valid, recurse back into get_valid_nodes to try
+        # to find a valid node.
+        get_valid_node(nodes)
       end
-    end)
+    end
+  end
+
+  defp get_valid_node(nodes, candidates) when length(candidates) == 0 do
+    Logger.warn "[FleetApi] All nodes have been checked, and no valid nodes were found."
+    {nil, nodes}
+  end
+
+  defp validate_node(node_url) do
+    node_url
+    |> fix_etcd_node_url
+    |> api_discovery
+    |> case do
+      {:ok, _discovery} -> true
+      _ -> false
+    end
   end
 
   @spec valid_state?(Map.t) :: boolean
