@@ -13,8 +13,7 @@ defmodule FleetApi.Request do
           proxy_opts -> [hackney: [proxy: proxy_opts]]
         end
 
-        request_id = UUID.uuid1()
-                     |> String.slice(0..7)
+        {_, _, request_id} = :os.timestamp()
 
         Logger.debug "[FleetApi] issuing request #{request_id} to #{url}"
 
