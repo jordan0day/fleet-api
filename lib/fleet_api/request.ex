@@ -30,7 +30,7 @@ defmodule FleetApi.Request do
             end
           {:ok, %HTTPoison.Response{status_code: status} = response} ->
             if status in expected_status do
-              Logger.debug "[FleetApi] request to #{url} succeeded with status code #{inspect status}"
+              Logger.debug "[FleetApi] request #{request_id} to #{url} succeeded with status code #{inspect status}"
               if String.length(response.body) != 0 && parse_response do
                 {:ok, Poison.decode!(response.body)}
               else
