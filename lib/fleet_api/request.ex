@@ -8,9 +8,10 @@ defmodule FleetApi.Request do
       # form of an atom, e.g. :get, :post, :delete, etc.
       @spec request(atom, String.t, [tuple], String.t, [integer], boolean) :: {:ok, any} | {:error, any}
       defp request(method, url, headers \\ [], body \\ "", expected_status \\ [200], parse_response \\ true) do
+        default_options = [recv_timeout: 30_000]
         options = case Application.get_env(:fleet_api, :proxy) do
-          nil -> []
-          proxy_opts -> [hackney: [proxy: proxy_opts]]
+          nil -> default_options
+          proxy_opts -> [hackney: [proxy: proxy_opts]] ++ default_options
         end
 
         {_, _, request_id} = :os.timestamp()
