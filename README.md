@@ -2,12 +2,12 @@
 
 An elixir wrapper for the [Fleet API](https://github.com/coreos/fleet/blob/master/Documentation/api-v1.md). Connect to the API running on one of your fleet cluster nodes using either a direct node URL or an [etcd](https://etcd.io) etcd token.
 
-[![Build Status](https://semaphoreci.com/api/v1/projects/d90076a2-33bc-458a-88e1-1a36cf82040a/375538/badge.png)](https://semaphoreci.com/jordanday/fleet-api)
+[![Build Status](https://semaphoreci.com/api/v1/projects/d90076a2-33bc-458a-88e1-1a36cf82040a/375538/badge.png)](https://semaphoreci.com/jordanday/fleet-api) [![Hex pm](http://img.shields.io/hexpm/v/fleet_api.svg?style=flat)](https://hex.pm/packages/fleet_api)
 
 ## Usage
 ### etcd token
 
-*Note that this is a config value you can set to override the port used to connect to the Fleet API when using an etcd token.*
+*Note that this is a config value you can set to override the port used to connect to the Fleet REST API when using an etcd token.*
 In your app's config, you can set
 
 ```elixir
